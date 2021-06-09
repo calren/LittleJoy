@@ -11,5 +11,8 @@ This is mostly a playground app to experiment with [Compose](https://developer.a
 
 #### Log
 
+##### 6/9/21
+- Second commit: Styling items in list
+
 ##### 6/8/21
 - First commit: Can display list of items with hardcoded data.
