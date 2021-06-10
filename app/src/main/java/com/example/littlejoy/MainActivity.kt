@@ -24,6 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.content.ContextCompat
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +37,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     val testEvents = listOf(
-                        Event("In the Heights", Date.valueOf("2021-6-10")),
-                        Event("Tammie's Bachlorette Party", Date.valueOf("2021-9-8")),
-                        Event("Linda's Wedding", Date.valueOf("2021-10-30"))
+                        Event("In the Heights", getInstantFromStringDate("2021-06-10")),
+                        Event(
+                            "Tammie's Bachelorette Party",
+                            getInstantFromStringDate("2021-09-08")
+                        ),
+                        Event("Linda's Wedding", getInstantFromStringDate("2021-10-30"))
                     )
                     EventsList(testEvents)
                 }
@@ -76,9 +83,9 @@ fun EventRow(event: Event) {
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                text = event.eventTime.toString(),
+                text = getDaysUntilDate(event.eventTime).toString() + " days away!",
                 color = Color.White,
-                fontSize = 20.sp
+                fontSize = 26.sp
             )
         }
     }
@@ -86,8 +93,11 @@ fun EventRow(event: Event) {
 
 var cardColorNumber = 1
 
+/**
+ * With a list of predefined colors, gets the next color in the list so every item in the list will
+ * have a different colored background.
+ */
 fun getNextColor(): Color {
-
     var colorToReturn = Color(0xFFE36857)
 
     // TODO Figure out how to get color from resources
@@ -106,13 +116,30 @@ fun getNextColor(): Color {
     return colorToReturn
 }
 
+fun getDaysUntilDate(date: Instant): Int {
+    val now = Instant.now()
+    val diffInDates = Duration.between(now, date)
+    val differenceInDays = diffInDates.toDays()
+    return differenceInDays.toInt()
+}
+
+/**
+ * Takes a string representation of a date in the form of YYYY-MM-DD and turns it into an Instant
+ */
+fun getInstantFromStringDate(date: String): Instant {
+    return LocalDate.parse(date).atStartOfDay(ZoneId.systemDefault()).toInstant()
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     val testEvents = listOf(
-        Event("In the Heights", Date.valueOf("2021-6-10")),
-        Event("Tammie's Bachlorette Party", Date.valueOf("2021-9-8")),
-        Event("Linda's Wedding", Date.valueOf("2021-10-30"))
+        Event("In the Heights", getInstantFromStringDate("2021-06-10")),
+        Event(
+            "Tammie's Bachelorette Party",
+            getInstantFromStringDate("2021-09-08")
+        ),
+        Event("Linda's Wedding", getInstantFromStringDate("2021-10-30"))
     )
 
     // Preview list
@@ -121,5 +148,5 @@ fun DefaultPreview() {
 //    }
 
     // Preview list item
-    EventRow(Event("Latte's Birthday", Date.valueOf("2021-7-30")))
+    EventRow(Event("Latte's Birthday", getInstantFromStringDate("2021-07-30")))
 }

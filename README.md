@@ -11,8 +11,11 @@ This is mostly a playground app to experiment with [Compose](https://developer.a
 
 #### Log
 
+##### 6/10/21
+- Add 'days away' text for items. Struggled with Dates in Android again.
+
 ##### 6/9/21
-- Second commit: Styling items in list
+- Styling items in list
 
 ##### 6/8/21
-- First commit: Can display list of items with hardcoded data.
+- Can display list of items with hardcoded data
