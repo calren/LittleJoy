@@ -9,5 +9,5 @@ import java.time.Instant
 data class Event(
     @PrimaryKey val uid: Int,
     @ColumnInfo(name = "event_name") val eventName: String,
-    @ColumnInfo(name = "event_time") val eventTime: Instant
+    @ColumnInfo(name = "event_time") val eventTime: Long
 )

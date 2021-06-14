@@ -28,6 +28,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.temporal.ChronoField
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +38,21 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     val testEvents = listOf(
-                        Event("In the Heights", getInstantFromStringDate("2021-06-10")),
                         Event(
-                            "Tammie's Bachelorette Party",
-                            getInstantFromStringDate("2021-09-08")
+                            1,
+                            "In the Heights",
+                            getInstantFromStringDate("2021-06-10").toEpochMilli()
                         ),
-                        Event("Linda's Wedding", getInstantFromStringDate("2021-10-30"))
+                        Event(
+                            2,
+                            "Tammie's Bachelorette Party",
+                            getInstantFromStringDate("2021-09-08").toEpochMilli()
+                        ),
+                        Event(
+                            3,
+                            "Linda's Wedding",
+                            getInstantFromStringDate("2021-10-30").toEpochMilli()
+                        )
                     )
                     EventsList(testEvents)
                 }
@@ -83,7 +93,7 @@ fun EventRow(event: Event) {
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                text = getDaysUntilDate(event.eventTime).toString() + " days away!",
+                text = getDaysUntilDate(Instant.ofEpochMilli(event.eventTime)).toString() + " days away!",
                 color = Color.White,
                 fontSize = 26.sp
             )
@@ -134,12 +144,13 @@ fun getInstantFromStringDate(date: String): Instant {
 @Composable
 fun DefaultPreview() {
     val testEvents = listOf(
-        Event("In the Heights", getInstantFromStringDate("2021-06-10")),
+        Event(1, "In the Heights", getInstantFromStringDate("2021-06-10").toEpochMilli()),
         Event(
+            2,
             "Tammie's Bachelorette Party",
-            getInstantFromStringDate("2021-09-08")
+            getInstantFromStringDate("2021-09-08").toEpochMilli()
         ),
-        Event("Linda's Wedding", getInstantFromStringDate("2021-10-30"))
+        Event(3, "Linda's Wedding", getInstantFromStringDate("2021-10-30").toEpochMilli())
     )
 
     // Preview list
@@ -148,5 +159,5 @@ fun DefaultPreview() {
 //    }
 
     // Preview list item
-    EventRow(Event("Latte's Birthday", getInstantFromStringDate("2021-07-30")))
+    EventRow(Event(1, "Latte's Birthday", getInstantFromStringDate("2021-07-30").toEpochMilli()))
 }
