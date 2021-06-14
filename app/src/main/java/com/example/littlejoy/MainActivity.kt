@@ -1,6 +1,7 @@
 package com.example.littlejoy
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,6 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -31,25 +36,34 @@ import java.time.ZoneId
 import java.time.temporal.ChronoField
 
 class MainActivity : ComponentActivity() {
+
+    val database by lazy { AppDatabase.getDatabase(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        database.eventDao().getAll().asLiveData().observe(this, Observer { events ->
+            events.forEach { event ->
+                Log.i("Caren", "Event: ${event.eventName}")
+            }
+
+        })
+
+
         setContent {
             LittleJoyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     val testEvents = listOf(
                         Event(
-                            1,
                             "In the Heights",
                             getInstantFromStringDate("2021-06-10").toEpochMilli()
                         ),
                         Event(
-                            2,
                             "Tammie's Bachelorette Party",
                             getInstantFromStringDate("2021-09-08").toEpochMilli()
                         ),
                         Event(
-                            3,
                             "Linda's Wedding",
                             getInstantFromStringDate("2021-10-30").toEpochMilli()
                         )
@@ -144,13 +158,12 @@ fun getInstantFromStringDate(date: String): Instant {
 @Composable
 fun DefaultPreview() {
     val testEvents = listOf(
-        Event(1, "In the Heights", getInstantFromStringDate("2021-06-10").toEpochMilli()),
+        Event("In the Heights", getInstantFromStringDate("2021-06-10").toEpochMilli()),
         Event(
-            2,
             "Tammie's Bachelorette Party",
             getInstantFromStringDate("2021-09-08").toEpochMilli()
         ),
-        Event(3, "Linda's Wedding", getInstantFromStringDate("2021-10-30").toEpochMilli())
+        Event("Linda's Wedding", getInstantFromStringDate("2021-10-30").toEpochMilli())
     )
 
     // Preview list
@@ -159,5 +172,5 @@ fun DefaultPreview() {
 //    }
 
     // Preview list item
-    EventRow(Event(1, "Latte's Birthday", getInstantFromStringDate("2021-07-30").toEpochMilli()))
+    EventRow(Event("Latte's Birthday", getInstantFromStringDate("2021-07-30").toEpochMilli()))
 }
