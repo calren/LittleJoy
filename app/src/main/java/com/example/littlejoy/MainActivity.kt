@@ -2,38 +2,31 @@ package com.example.littlejoy
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.littlejoy.ui.theme.LittleJoyTheme
-import java.sql.Date
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.ChronoField
 
 class MainActivity : ComponentActivity() {
 
@@ -52,23 +45,37 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LittleJoyTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    val testEvents = listOf(
-                        Event(
-                            "In the Heights",
-                            getInstantFromStringDate("2021-06-10").toEpochMilli()
-                        ),
-                        Event(
-                            "Tammie's Bachelorette Party",
-                            getInstantFromStringDate("2021-09-08").toEpochMilli()
-                        ),
-                        Event(
-                            "Linda's Wedding",
-                            getInstantFromStringDate("2021-10-30").toEpochMilli()
+                Scaffold(
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            shape = CircleShape,
+                            onClick = {Log.i("Caren", "Add an event!")},
+                        ) {
+                            Icon(Icons.Filled.Add, "Add Event")
+                        }
+                    },
+                    floatingActionButtonPosition = FabPosition.End,
+                    isFloatingActionButtonDocked = true,
+                ) {
+                    // A surface container using the 'background' color from the theme
+                    Surface(color = MaterialTheme.colors.background) {
+                        val testEvents = listOf(
+                            Event(
+                                "In the Heights",
+                                getInstantFromStringDate("2021-06-10").toEpochMilli()
+                            ),
+                            Event(
+                                "Tammie's Bachelorette Party",
+                                getInstantFromStringDate("2021-09-08").toEpochMilli()
+                            ),
+                            Event(
+                                "Linda's Wedding",
+                                getInstantFromStringDate("2021-10-30").toEpochMilli()
+                            )
                         )
-                    )
-                    EventsList(testEvents)
+                        EventsList(testEvents)
+//                        FloatingActionButton()
+                    }
                 }
             }
         }
@@ -113,6 +120,15 @@ fun EventRow(event: Event) {
             )
         }
     }
+}
+
+@Composable
+fun FloatingActionButton() {
+    ExtendedFloatingActionButton(
+        icon = { Icon(Icons.Filled.Add, "") },
+        text = { Text("Add Event") },
+        onClick = { Log.i("Caren", "Let's add an event!") }
+    )
 }
 
 var cardColorNumber = 1
@@ -167,10 +183,10 @@ fun DefaultPreview() {
     )
 
     // Preview list
-//    LittleJoyTheme {
-//        EventsList(testEvents)
-//    }
+    LittleJoyTheme {
+        EventsList(testEvents)
+    }
 
     // Preview list item
-    EventRow(Event("Latte's Birthday", getInstantFromStringDate("2021-07-30").toEpochMilli()))
+//    EventRow(Event("Latte's Birthday", getInstantFromStringDate("2021-07-30").toEpochMilli()))
 }
