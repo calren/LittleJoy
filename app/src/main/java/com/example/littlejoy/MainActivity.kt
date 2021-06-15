@@ -1,5 +1,6 @@
 package com.example.littlejoy
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
@@ -49,7 +51,9 @@ class MainActivity : ComponentActivity() {
                     floatingActionButton = {
                         FloatingActionButton(
                             shape = CircleShape,
-                            onClick = {Log.i("Caren", "Add an event!")},
+                            onClick = {
+                                startActivity(Intent(baseContext, AddEventActivity::class.java))
+                            },
                         ) {
                             Icon(Icons.Filled.Add, "Add Event")
                         }
@@ -74,7 +78,6 @@ class MainActivity : ComponentActivity() {
                             )
                         )
                         EventsList(testEvents)
-//                        FloatingActionButton()
                     }
                 }
             }
